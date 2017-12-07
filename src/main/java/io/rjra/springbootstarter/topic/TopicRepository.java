@@ -1,7 +1,7 @@
 /**
  * 
  */
-package io.javabrains.springbootstarter.topic;
+package io.rjra.springbootstarter.topic;
 
 import org.springframework.data.repository.CrudRepository;
 

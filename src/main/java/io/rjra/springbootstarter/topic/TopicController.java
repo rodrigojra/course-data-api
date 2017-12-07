@@ -1,16 +1,20 @@
-package io.javabrains.springbootstarter.topic;
+package io.rjra.springbootstarter.topic;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.rjra.springbootstarter.exception.ResourceNotFoundException;
+
 @RestController
 public class TopicController {
+
 
 	@Autowired
 	private TopicService topicService;
@@ -21,8 +25,17 @@ public class TopicController {
 	}
 
 	@RequestMapping("/topics/{id}")
-	public Topic getTopic(@PathVariable String id) {
-		return topicService.getTopic(id);
+	public Topic getTopic(@PathVariable String id) throws Exception {
+		Topic topic = topicService.getTopic(id);
+		
+		if (topic == null || StringUtils.isEmpty(topic.getId()))
+		{
+			throw new ResourceNotFoundException("Resource not found!",
+					"Verify if the specified ID really exists!", 
+					"Specified ID: "+ id);
+		}
+		
+		return topic;
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/topics")
@@ -40,5 +53,6 @@ public class TopicController {
 		topicService.deleteTopic(id);
 		
 	}
+	
 	
 }
